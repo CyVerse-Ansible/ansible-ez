@@ -28,6 +28,7 @@ Example of options
 "
 	else
 		echo "updating ez cli"
+		rm -rf /opt/cyverse-ez
 		ansible-pull -v -U https://github.com/cyverse/cyverse-ez.git -d /opt/cyverse-ez -i locahost -e ez_force_update=yes -e EZ_INSTALL_DIR={{EZ_INSTALL_DIR|default("/opt")}} -o > /var/log/cyverse-ez.log 2>&1
 		if [ $? -eq 0 ]; then
 			echo "success in updating!"

@@ -2,12 +2,14 @@
 
 ezd () {
 		echo
-                echo "* Updating ez docker (may take a few minutes)"
+                echo "* Updating ez docker  and installing docker (may take a few minutes)"
                 ansible-pull -v -U https://github.com/cyverse/cyverse-ez-docker.git -d /opt/cyverse-ez-docker -i locahost -f > /var/log/cyverse-ez.log 2>&1
 		if [ $? == 0 ]; then
-			echo "* ez docker was updated successfully"
+			echo "* docker was updated successfully"
+			echo
+			echo "You shouldn't need to use ezd again on this system, unless you want to update docker itself"
 		else
-			echo "* ez docker may not have updated successfully, but you can probably try executing it"
+			echo "* ez docker or docker itself may not have updated successfully, but you can probably try executing it"
 		fi
 
 		echo

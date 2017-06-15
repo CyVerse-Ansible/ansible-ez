@@ -3,7 +3,7 @@
 ezd () {
 		echo
                 echo "* Updating ez docker and installing docker (this may take a few minutes, coffee break!)"
-                ansible-pull -v -U https://github.com/cyverse/cyverse-ez-docker.git -d /opt/cyverse-ez-docker -i locahost -f > /var/log/cyverse-ez.log 2>&1
+                sudo ansible-pull -v -U https://github.com/cyverse/cyverse-ez-docker.git -d /opt/cyverse-ez-docker -i locahost -f > /var/log/cyverse-ez.log 2>&1
 		if [ $? == 0 ]; then
 			echo "* docker was updated successfully"
 			echo

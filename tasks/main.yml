@@ -13,8 +13,11 @@
     dest=/etc/profile.d/cyverse15-ez-setup.sh
     mode=0755
 
-- name: copy profile-cyverse20-ezj-setup.sh.j2 to /etc/profile.d
+- name: copy profile-cyverse20-*-setup.sh.j2 to /etc/profile.d
   template:
-    src=profile-cyverse20-ezj-setup.sh.j2
-    dest=/etc/profile.d/cyverse20-ezj-setup.sh
+    src="profile-cyverse20-{{ item }}-setup.sh.j2"
+    dest="/etc/profile.d/cyverse20-{{ item }}-setup.sh"
     mode=0755
+  with_items:
+  - "ezj"
+  - "ezd"

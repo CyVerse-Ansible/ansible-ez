@@ -8,17 +8,17 @@ This role is to be used in conjunction with the CyVerse EZ playbook: https://git
 Requirements
 ------------
 
-This will require git and ansible to be installed on the target system
+This will require ansible to be installed on the target system
 
 Role Variables
 --------------
 
-TBD
+* EZ_INSTALL_DIR, the prefix for any software to be installed on the target system. If not defined, /opt will be used.
 
 Dependencies
 ------------
 
-NA
+* Ansible
 
 
 License

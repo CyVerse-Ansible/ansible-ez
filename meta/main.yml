@@ -14,7 +14,7 @@ galaxy_info:
   # - GPLv3
   # - Apache
   # - CC-BY
-  license: BSD
+  license: see LICENSE.md
 
   min_ansible_version: 2.0
 
@@ -137,7 +137,7 @@ galaxy_info:
   #  - quantal
   #  - raring
   #  - saucy
-  #  - trusty
+    - trusty
   #  - utopic
   #  - vivid
   #  - wily
@@ -158,9 +158,9 @@ galaxy_info:
   #  versions:
   #  - all
   #  - any
-  #- name: EL
-  #  versions:
-  #  - all
+  - name: EL
+    versions:
+    - all
   #  - 5
   #  - 6
   #  - 7
@@ -209,7 +209,12 @@ galaxy_info:
   #  - all
   #  - Any
 
-  galaxy_tags: []
+  galaxy_tags: 
+    - shell
+    - cyverse
+    - cloud
+    - bash
+    - ansible
     # List tags for your role here, one per line. A tag is
     # a keyword that describes and categorizes the role.
     # Users find roles by searching for tags. Be sure to

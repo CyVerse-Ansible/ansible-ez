@@ -13,7 +13,12 @@ ezj  -> run jupyter-notebook with python detection
 ezd  -> install docker (Only supported on Ubuntu 14+ and CentOS 7)
 
 Options to pass to 'ez':
-ez update -> perform a full update of the ez facility
+
+	update -> perform a full update of the ez facility
+
+	Example of options:
+
+	ez update
 
 Options to pass to 'ezj':
 -q      do not attempt to install, just launch jupyter!
@@ -24,10 +29,14 @@ Options to pass to 'ezj':
 -p      takes a directory as an option; install in a different location other than default ($CYVERSE_INSTALL_ROOT)
         NOTE: if you set this, you must pass it again for future calls
 
-Example of options
+	Example of options:
 
         ezj -u -R
         ezj -p /opt -u
+
+Options to pass to 'ezd':
+
+	none
 
 "
 	else
@@ -46,8 +55,5 @@ Example of options
 	fi
 }
 
-Options to pass to 'ezd':
-
-none
 
 

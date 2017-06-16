@@ -1,2 +1,8 @@
 ---
 # defaults file for ez
+
+# this is the location of the local log file
+ez_local_log: "/var/log/cyverse-ez.log"
+
+# this is the location of the local variables file
+ez_local_settings: "/etc/cyverse/ez.yml"

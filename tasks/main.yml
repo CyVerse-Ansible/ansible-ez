@@ -1,6 +1,11 @@
 ---
 # tasks file for ez
 
+- name: include variables found in /etc/cyverse/ez.yml, if it exists; if error, just ignore
+  include_vars:
+    file: " {{ ez_local_settings }}"
+  ignore_errors: yes
+
 - name: copy profile-cyverse10-utils.sh.j2 to /etc/profile.d
   template:
     src=profile-cyverse10-utils.sh.j2
@@ -25,6 +30,6 @@
 
 - name: logfile for ansible-pulls, let's touch it and set the right permissions
   file:
-    path: /var/log/cyverse-ez.log 
+    path: "{{ ez_local_log }}"
     state: touch
     mode: 0777

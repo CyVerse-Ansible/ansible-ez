@@ -22,8 +22,8 @@
   - "ezj"
   - "ezd"
 
-  - name: logfile for ansible-pulls, let's touch it and set the right permissions
-    file:
-      path: /var/log/cyverse-ez.log 
-      state: touch
-      mode: 0777
+- name: logfile for ansible-pulls, let's touch it and set the right permissions
+  file:
+    path: /var/log/cyverse-ez.log 
+    state: touch
+    mode: 0777

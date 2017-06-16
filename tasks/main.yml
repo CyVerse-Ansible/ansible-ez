@@ -1,9 +1,21 @@
 ---
 # tasks file for ez
 
+- name: create the directory for the settings
+  file:
+    path: "{{ ez_local_settings_dir }}"
+    state: directory
+    mode: 0755
+
+- name: touch the file and set the permissions
+  file:
+    path: "{{ ez_local_settings_dir }}/{{ ez_local_settings_file }}"
+    state: touch
+    mode: 0644
+
 - name: include variables found in /etc/cyverse/ez.yml, if it exists; if error, just ignore
   include_vars:
-    file: " {{ ez_local_settings }}"
+    file: "{{ ez_local_settings_dir }}/{{ ez_local_settings_file }}"
   ignore_errors: yes
 
 - name: copy profile-cyverse10-utils.sh.j2 to /etc/profile.d

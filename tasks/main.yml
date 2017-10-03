@@ -32,5 +32,5 @@
 
 - name: install via pip
   pip:
-    name: https://github.com/edwins/python-cyverse-ez.git
+    name: "{{ ez_python_cyverse_ez_url }}"
     state: forcereinstall

@@ -11,4 +11,4 @@ ez_local_settings_dir: "/etc/cyverse"
 ez_local_settings_file: "ez.yml"
 
 # this is the current location of python-cyverse-ez
-ez_python_cyverse_ez: "git+https://github.com/edwins/python-cyverse-ez.git"
+ez_python_cyverse_ez_url: "git+https://github.com/edwins/python-cyverse-ez.git"

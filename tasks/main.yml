@@ -24,7 +24,13 @@
     state: touch
     mode: 0777
 
-# this section will install the python-cyverse-ez via pip
+# this section will install the python-cyverse-ez via pip; the package name collides with the existing pip, will rename later
+- name: until the project has proper versions, for an uninstall of python-cyverse-ez
+  pip:
+    name: ez
+    state: absent
+
 - name: install via pip
   pip:
     name: https://github.com/edwins/python-cyverse-ez.git
+    state: forcereinstall

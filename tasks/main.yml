@@ -18,30 +18,13 @@
     file: "{{ ez_local_settings_dir }}/{{ ez_local_settings_file }}"
   ignore_errors: yes
 
-- name: copy profile-cyverse10-utils.sh.j2 to /etc/profile.d
-  template:
-    src=profile-cyverse10-utils.sh.j2
-    dest=/etc/profile.d/cyverse10-utils.sh
-    mode=0755
-
-- name: copy profile-cyverse15-ez-setup.sh.j2 to /etc/profile.d
-  template:
-    src=profile-cyverse15-ez-setup.sh.j2
-    dest=/etc/profile.d/cyverse15-ez-setup.sh
-    mode=0755
-
-- name: copy profile-cyverse20-*-setup.sh.j2 to /etc/profile.d
-  template:
-    src="profile-cyverse20-{{ item }}-setup.sh.j2"
-    dest="/etc/profile.d/cyverse20-{{ item }}-setup.sh"
-    mode=0755
-  with_items:
-  - "ezj"
-  - "ezd"
-  - "ezs"
-
 - name: logfile for ansible-pulls, let's touch it and set the right permissions
   file:
     path: "{{ ez_local_log }}"
     state: touch
     mode: 0777
+
+# this section will install the python-cyverse-ez via pip
+- name: install via pip
+  pip:
+    name: https://github.com/edwins/python-cyverse-ez.git

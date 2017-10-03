@@ -30,7 +30,25 @@
     name: cyverse-ez
     state: absent
 
+#- name: install via pip
+#  pip:
+#    name: "{{ ez_python_cyverse_ez_url }}"
+#    state: forcereinstall
+
+# this is temporary for testing
+######
+## TMP
+######
+- name: download python-cyverse-ez directly
+  git: 
+    repo: "https://github.com/edwins/python-cyverse-ez.git"
+    dest: "/opt/cyverse/tmp/python-cyverse-ez" 
+  ignore_errors: yes
+
 - name: install via pip
   pip:
-    name: "{{ ez_python_cyverse_ez_url }}"
+    name: "/opt/cyverse/tmp/python-cyverse-ez"
     state: forcereinstall
+######
+## TMP
+######

@@ -27,7 +27,7 @@
 # this section will install the python-cyverse-ez via pip; the package name collides with the existing pip, will rename later
 - name: until the project has proper versions, for an uninstall of python-cyverse-ez
   pip:
-    name: ez
+    name: cyverse-ez
     state: absent
 
 - name: install via pip

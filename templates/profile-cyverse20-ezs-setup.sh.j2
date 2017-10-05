@@ -3,7 +3,9 @@
 ezs () {
 		echo
                 echo "* Updating ez singularity and installing singularity (this may take a few minutes, coffee break!)"
-                sudo ansible-pull -v -U https://github.com/cyverse/cyverse-ez-singularity.git -d /opt/cyverse-ez-singularity -i locahost -f > {{ ez_local_log }} 2>&1
+		sudo rm -rf /opt/cyverse-ez-singularity
+                sudo git pull https://github.com/cyverse/cyverse-ez-singularity.git /opt/cyverse-ez-singularity/ >> {{ ez_local_log }}
+                sudo ansible-pull -v -U https://github.com/cyverse/cyverse-ez-singularity.git -d /opt/cyverse-ez-singularity -i locahost -f >> {{ ez_local_log }} 2>&1
 		if [ $? == 0 ]; then
 			echo "* singularity was updated successfully"
 			echo

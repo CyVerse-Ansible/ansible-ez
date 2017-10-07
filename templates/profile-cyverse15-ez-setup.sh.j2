@@ -46,8 +46,8 @@ Options to pass to 'ezs':
 "
 	else
 		echo "updating ez cli"
-		sudo rm -rf /opt/cyverse-ez /etc/ansible/roles/ez
-		sudo git pull https://github.com/cyverse/cyverse-ez.git >> {{ ez_local_log }}
+		sudo rm -rf /opt/cyverse-ez /etc/ansible/roles/ez /root/.ansible
+		sudo git clone https://github.com/cyverse/cyverse-ez.git >> {{ ez_local_log }}
 		sudo ansible-pull -v -U https://github.com/cyverse/cyverse-ez.git -d /opt/cyverse-ez -i locahost -e ez_force_update=yes -e EZ_INSTALL_DIR={{EZ_INSTALL_DIR|default("/opt")}} -f >> {{ ez_local_log }} 2>&1
 		if [ $? -eq 0 ]; then
 			echo "success in updating!"
@@ -60,6 +60,3 @@ Options to pass to 'ezs':
 
 	fi
 }
-
-
-

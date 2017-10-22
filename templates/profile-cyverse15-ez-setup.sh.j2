@@ -1,10 +1,9 @@
+#!/bin/bash
+
 # you may need to define this in other profile scripts
 CYVERSE_INSTALL_ROOT={{EZ_INSTALL_DIR|default("/opt")}}
 
-ez () {
-
-	if [ $# -ne 1 -o "$1" != "update" ]; then
-
+print_help() {
 		echo "
 Here are the different ez commands:
 
@@ -16,10 +15,12 @@ ezs  -> install singularity (Only supported on Ubuntu 14+ and CentOS 6+)
 Options to pass to 'ez':
 
 	update -> perform a full update of the ez facility
+	beta   -> test the beta version of ez
 
 	Example of options:
 
 	ez update
+	ez beta
 
 Options to pass to 'ezj':
 -q      do not attempt to install, just launch jupyter!
@@ -44,7 +45,13 @@ Options to pass to 'ezs':
 	none
 
 "
-	else
+}
+
+ez () {
+
+	if [ $# -ne 1 ]; then
+		print_help
+	elif [ "$1" = "update" ]; then
 		echo "updating ez cli"
 		sudo rm -rf /opt/cyverse-ez /etc/ansible/roles/ez /root/.ansible
 		sudo git clone https://github.com/cyverse/cyverse-ez.git /etc/cyverse-ez >> {{ ez_local_log }}
@@ -57,6 +64,36 @@ Options to pass to 'ezs':
 		else
 			echo "Warning: there may have been an issue updating, but you can probably still use ez cli"
 		fi
+	elif [ "$1" = "beta" ]; then
+		sudo apt-get -y install python-pip
+		sudo pip install -U pip
+		sudo pip uninstall -y cyverse-ez
+		if [ ! -d /opt/cyverse/tmp ]; then
+			sudo mkdir -p /opt/cyverse/tmp
+			sudo chmod a+rwx /opt/cyverse/tmp
+		fi
 
+		# update the python cyverse ez 
+		if [ -d /opt/cyverse/tmp/python-cyverse-ez ]; then
+			curdir=$PWD
+			cd /opt/cyverse/tmp/python-cyverse-ez
+			git pull
+			cd $curdir
+		else
+			git clone https://github.com/edwins/python-cyverse-ez.git /opt/cyverse/tmp/python-cyverse-ez
+		fi
+		sudo pip install --force-reinstall /opt/cyverse/tmp/python-cyverse-ez
+
+		# update the python cyverse ez modules
+		if [ -d /opt/cyverse/tmp/python-cyverse-ez-modules ]; then
+			curdir=$PWD
+			cd /opt/cyverse/tmp/python-cyverse-ez-modules
+			git update
+			cd $curdir
+		else
+			git clone https://github.com/edwins/python-cyverse-ez-modules.git /opt/cyverse/tmp/python-cyverse-ez-modules
+		fi
+	else
+		print_help
 	fi
 }

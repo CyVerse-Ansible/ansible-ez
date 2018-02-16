@@ -64,7 +64,7 @@ ez () {
 		else
 			echo "Warning: there may have been an issue updating, but you can probably still use ez cli"
 		fi
-	elif [ "$1" = "beta" ]; then
+	elif [ "$1" = "betainstall" ]; then
 		sudo apt-get -y install python-pip
 		sudo pip install -U pip
 		sudo pip uninstall -y cyverse-ez
@@ -88,7 +88,7 @@ ez () {
 		if [ -d /opt/cyverse/tmp/python-cyverse-ez-modules ]; then
 			curdir=$PWD
 			cd /opt/cyverse/tmp/python-cyverse-ez-modules
-			git update
+			git pull
 			cd $curdir
 		else
 			git clone https://github.com/edwins/python-cyverse-ez-modules.git /opt/cyverse/tmp/python-cyverse-ez-modules

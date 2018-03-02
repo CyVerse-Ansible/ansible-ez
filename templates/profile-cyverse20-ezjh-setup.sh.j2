@@ -1,0 +1,21 @@
+#!/bin/bash  -x
+
+ezjh () {
+		echo
+                echo "* Updating ez jupyterhub and installing jupyterhub (this may take a long while, take a long coffee break!)"
+		sudo rm -rf /opt/cyverse-ez-jupyterhub
+                sudo git clone https://github.com/cyverse/cyverse-ez-jupyterhub.git /opt/cyverse-ez-jupyterhub/ >> {{ ez_local_log }}
+                sudo ansible-pull -v -U https://github.com/cyverse/cyverse-ez-jupyterhub.git -d /opt/cyverse-ez-jupyterhub -i locahost -f >> {{ ez_local_log }} 2>&1
+		if [ $? == 0 ]; then
+			echo "* singularity was updated successfully"
+			echo
+			echo "You shouldn't need to use ezjh again on this system, unless you want to update jupyterhub itself"
+		else
+			echo "* ez jupyterhub or jupyterhub itself may not have updated successfully, but you can probably try executing it"
+		fi
+
+		echo
+		echo "To connect to your jupyterhub point your browser to: http://${CYVERSE_PUBLIC_IP}"
+		echo
+
+}

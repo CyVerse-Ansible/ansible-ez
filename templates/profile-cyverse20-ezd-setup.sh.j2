@@ -5,7 +5,7 @@ ezd () {
                 echo "* Updating ez docker and installing docker (this may take a few minutes, coffee break!)"
 		sudo rm -rf /opt/cyverse-ez-docker
 		sudo git clone https://github.com/cyverse/cyverse-ez-docker.git /opt/cyverse-ez-docker >> {{ ez_local_log }}
-                sudo ansible-pull -v -U https://github.com/cyverse/cyverse-ez-docker.git -d /opt/cyverse-ez-docker -i locahost -e ansible_docker_user=${USER} -f >> {{ ez_local_log }} 2>&1
+                sudo ansible-pull -v -U https://github.com/cyverse/cyverse-ez-docker.git -d /opt/cyverse-ez-docker -i localhost -e ansible_docker_user=${USER} -f >> {{ ez_local_log }} 2>&1
 		if [ $? == 0 ]; then
 			echo "* docker was updated successfully"
 			echo

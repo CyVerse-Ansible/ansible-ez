@@ -60,7 +60,7 @@ ez () {
 		echo "updating ez cli"
 		sudo rm -rf /opt/cyverse-ez /etc/ansible/roles/ez /root/.ansible
 		sudo git clone https://github.com/cyverse/cyverse-ez.git /etc/cyverse-ez >> {{ ez_local_log }}
-		sudo ansible-pull -v -U https://github.com/cyverse/cyverse-ez.git -d /opt/cyverse-ez -i locahost -e ez_force_update=yes -e EZ_INSTALL_DIR={{EZ_INSTALL_DIR|default("/opt")}} -f >> {{ ez_local_log }} 2>&1
+		sudo ansible-pull -v -U https://github.com/cyverse/cyverse-ez.git -d /opt/cyverse-ez -i localhost -e ez_force_update=yes -e EZ_INSTALL_DIR={{EZ_INSTALL_DIR|default("/opt")}} -f >> {{ ez_local_log }} 2>&1
 		if [ $? -eq 0 ]; then
 			echo "success in updating!"
 			for i in /etc/profile.d/cyverse*; do

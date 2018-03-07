@@ -13,9 +13,9 @@ cyverse_public_ip() {
 
    if [ -z "$CYVERSE_PUBLIC_IP" ]; then
       if [ $is_centos5 -eq 1 ]; then
-         CYVERSE_PUBLIC_IP=$(curl -s 'http://169.254.169.254/openstack/latest/meta_data.json' | python -c'from simplejson.tool import main; main()' | sed -n -e '/"public-ip":/ s/^.*"\(.*\)".*/\1/p')
+         CYVERSE_PUBLIC_IP=$(curl -s 'http://169.254.169.254/openstack/latest/meta_data.json' | python -c'from simplejson.tool import main; main()' 2>/dev/null | sed -n -e '/"public-ip":/ s/^.*"\(.*\)".*/\1/p')
       else
-         CYVERSE_PUBLIC_IP=$(curl -s 'http://169.254.169.254/openstack/latest/meta_data.json' | python -mjson.tool | sed -n -e '/"public-ip":/ s/^.*"\(.*\)".*/\1/p')
+         CYVERSE_PUBLIC_IP=$(curl -s 'http://169.254.169.254/openstack/latest/meta_data.json' | python -mjson.tool 2>/dev/null | sed -n -e '/"public-ip":/ s/^.*"\(.*\)".*/\1/p')
       fi
    fi
 

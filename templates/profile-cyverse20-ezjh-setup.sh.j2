@@ -7,7 +7,7 @@ ezjh () {
                 sudo git clone https://github.com/cyverse/cyverse-ez-jupyterhub.git /opt/cyverse-ez-jupyterhub/ >> {{ ez_local_log }}
                 sudo ansible-pull -v -U https://github.com/cyverse/cyverse-ez-jupyterhub.git -d /opt/cyverse-ez-jupyterhub -i localhost -f >> {{ ez_local_log }} 2>&1
 		if [ $? == 0 ]; then
-			echo "* singularity was updated successfully"
+			echo "* jupyterhub was updated successfully"
 			echo
 			echo "You shouldn't need to use ezjh again on this system, unless you want to update jupyterhub itself"
 		else
@@ -15,6 +15,7 @@ ezjh () {
 		fi
 
 		echo
+		cyverse_public_ip
 		echo "To connect to your jupyterhub point your browser to: http://${CYVERSE_PUBLIC_IP}"
 		echo
 

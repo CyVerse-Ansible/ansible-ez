@@ -2,7 +2,7 @@
 
 ezjh () {
 		echo
-                echo "* Updating ez jupyterhub and installing jupyterhub (this may take a long while, take a long coffee break!)"
+                echo "* Updating ez jupyterhub and installing jupyterhub. This may take a long while (10-15 minutes for a fresh install). Take a long coffee break!"
 		sudo rm -rf /opt/cyverse-ez-jupyterhub
                 sudo git clone https://github.com/cyverse/cyverse-ez-jupyterhub.git /opt/cyverse-ez-jupyterhub/ >> {{ ez_local_log }}
                 sudo ansible-pull -v -U https://github.com/cyverse/cyverse-ez-jupyterhub.git -d /opt/cyverse-ez-jupyterhub -i localhost -f >> {{ ez_local_log }} 2>&1

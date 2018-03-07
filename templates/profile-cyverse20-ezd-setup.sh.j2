@@ -10,6 +10,9 @@ ezd () {
 			echo "* docker was updated successfully"
 			echo
 			echo "You shouldn't need to use ezd again on this system, unless you want to update docker itself"
+			echo "NOTE: If you'd like to run docker as your system user and you can't (i.e. get a permission denied),"
+			echo "  you can use the following command: sudo usermod -a -G docker myusername"
+			echo "  replace 'myusername' with your login"
 		else
 			echo "* ez docker or docker itself may not have updated successfully, but you can probably try executing it"
 		fi

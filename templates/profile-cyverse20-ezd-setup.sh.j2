@@ -1,25 +1,54 @@
 #!/bin/bash  -x
 
 ezd () {
-		echo
-                echo "* Updating ez docker and installing docker (this may take a few minutes, coffee break!)"
-		sudo rm -rf /opt/cyverse-ez-docker
-		sudo git clone https://github.com/cyverse/cyverse-ez-docker.git /opt/cyverse-ez-docker >> {{ ez_local_log }}
-                sudo ansible-pull -v -U https://github.com/cyverse/cyverse-ez-docker.git -d /opt/cyverse-ez-docker -i localhost -e ansible_docker_user=${USER} -f >> {{ ez_local_log }} 2>&1
-		if [ $? == 0 ]; then
-			echo "* docker was updated successfully"
-			echo
-			echo "You shouldn't need to use ezd again on this system, unless you want to update docker itself"
-			echo ""
-			echo "NOTE: If you'd like to run docker as your system user and you can't (i.e. get a permission denied),"
-			echo "  you can use the following command: sudo usermod -a -G docker myusername"
-			echo "  replace 'myusername' with your login. You may need to logout and login again."
-		else
-			echo "* ez docker or docker itself may not have updated successfully, but you can probably try executing it"
-		fi
+	local OPTIND opt                
 
-		echo
-		echo "To test docker, type: docker run hello-world"
-		echo
+	portainer_enabled="False"
+	while getopts "p" opt; do
+		case $opt in
+		p)
+			echo "DEBUG: option to install portainer enabled"
+			portainer_enabled="True"
+			;;
+		\?)
+			echo "invalid flag -$OPTARG"
+			;;
+		esac
+	done
 
+	echo
+	echo "* Updating ez docker and installing docker (this may take a few minutes, coffee break!)"
+	sudo rm -rf /opt/cyverse-ez-docker
+	sudo git clone https://github.com/cyverse/cyverse-ez-docker.git /opt/cyverse-ez-docker >> {{ ez_local_log }}
+	sudo ansible-pull -v -U https://github.com/cyverse/cyverse-ez-docker.git -d /opt/cyverse-ez-docker -i localhost -e ansible_docker_user=${USER} -f >> {{ ez_local_log }} 2>&1
+	sudo ansible-pull -v -U https://github.com/cyverse/cyverse-ez-docker.git -d /opt/cyverse-ez-docker -i localhost -e "{'ansible_docker_user':${USER},'ansible_portainer_enabled':${portainer_enabled}}" -f >> {{ ez_local_log }} 2>&1
+	if [ $? == 0 ]; then
+		echo "* docker was updated successfully"
+		echo
+		echo "You shouldn't need to use ezd again on this system, unless you want to update docker itself"
+		echo ""
+		echo "NOTE: If you'd like to run docker as your system user and you can't (i.e. get a permission denied),"
+		echo "  you can use the following command: sudo usermod -a -G docker myusername"
+		echo "  replace 'myusername' with your login. You may need to logout and login again."
+	else
+		echo "* ez docker or docker itself may not have updated successfully, but you can probably try executing it"
+	fi 
+
+	if [ $portainer_enabled = "True" ]; then
+		cyverse_public_ip
+		portainer_pass_file=/opt/cyverse_portainer_admin.pass
+		echo "PORTAINER ENABLED:"
+		echo 
+		echo "	To access portainer, use the following url: http://${CYVERSE_PUBLIC_IP}:9000"
+		echo "	The admin password:"
+		echo "	"`cat $portainer_pass_file`
+		echo
+		echo "	Note 1: the portainer admin password can always be found in: $portainer_pass_file"
+		echo "	Note 2: if you ever need to restart the portainer container, type: portainer_run "
+		echo 
+	fi
+
+	echo
+	echo "To test docker, type: docker run hello-world"
+	echo
 }

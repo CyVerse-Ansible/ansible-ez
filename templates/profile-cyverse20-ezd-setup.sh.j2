@@ -37,10 +37,12 @@ ezd () {
 	if [ $portainer_enabled = "True" ]; then
 		cyverse_public_ip
 		portainer_pass_file=/opt/cyverse_portainer/admin.pass
+		echo
 		echo "PORTAINER ENABLED:"
 		echo 
 		echo "	To access portainer, use the following url: http://${CYVERSE_PUBLIC_IP}:9000"
 		echo "	The admin password:"
+		echo
 		echo "	"`cat $portainer_pass_file`
 		echo
 		echo "	Note 1: the portainer admin password can always be found in: $portainer_pass_file"

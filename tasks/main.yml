@@ -59,13 +59,15 @@
     path: "{{ ANSIBLE_EZ_SYSTEM_BASH }}"
     marker: "# -- {mark} CYVERSE EZ MANAGED BLOCK -- #
     block: |
-	if [ "$(type -t ez)" != "function" ]; then
-		source /etc/profile.d/cyverse10-utils.sh
-		source /etc/profile.d/cyverse15-utils.sh
-		source /etc/profile.d/cyverse20-ezd-setup.sh
-		source /etc/profile.d/cyverse20-ezj-setup.sh
-		source /etc/profile.d/cyverse20-ezjh-setup.sh
-		source /etc/profile.d/cyverse20-ezs-setup.sh
-	fi
+
+      if [ "$(type -t ez)" != "function" ]; then
+        source /etc/profile.d/cyverse10-utils.sh
+        source /etc/profile.d/cyverse15-utils.sh
+        source /etc/profile.d/cyverse20-ezd-setup.sh
+        source /etc/profile.d/cyverse20-ezj-setup.sh
+        source /etc/profile.d/cyverse20-ezjh-setup.sh
+        source /etc/profile.d/cyverse20-ezs-setup.sh
+      fi
+
     backup: yes
   when: ANSIBLE_EZ_SYSTEM_BASH is defined 

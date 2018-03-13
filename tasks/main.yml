@@ -60,7 +60,7 @@
     marker: "# -- {mark} CYVERSE EZ MANAGED BLOCK -- #
     block: |
 
-      if [ "$(type -t ez)" != "function" ]; then
+      if [ "$$(type -t ez)" != "function" ]; then
         source /etc/profile.d/cyverse10-utils.sh
         source /etc/profile.d/cyverse15-utils.sh
         source /etc/profile.d/cyverse20-ezd-setup.sh

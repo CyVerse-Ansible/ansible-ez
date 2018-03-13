@@ -1,6 +1,14 @@
 ---
 # tasks file for ez
 
+- name: Gather OS specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+      - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+      - "{{ ansible_distribution }}.yml"
+    skip: true
+
 - name: create the directory for the settings
   file:
     path: "{{ ez_local_settings_dir }}"
@@ -46,3 +54,19 @@
     path: "{{ ez_local_log }}"
     state: touch
     mode: 0777
+
+- name: this adds lines into /etc/bash.bashrc if ubuntu
+  blockinfile:
+    path: "{{ ANSIBLE_EZ_SYSTEM_BASH }}"
+    marker: "# -- {mark} CYVERSE EZ MANAGED BLOCK -- #
+    block: |
+	if [ "$(type -t ez)" != "function" ]; then
+		source /etc/profile.d/cyverse10-utils.sh
+		source /etc/profile.d/cyverse15-utils.sh
+		source /etc/profile.d/cyverse20-ezd-setup.sh
+		source /etc/profile.d/cyverse20-ezj-setup.sh
+		source /etc/profile.d/cyverse20-ezjh-setup.sh
+		source /etc/profile.d/cyverse20-ezs-setup.sh
+	fi
+    backup: yes
+  when: ANSIBLE_EZ_SYSTEM_BASH is defined 

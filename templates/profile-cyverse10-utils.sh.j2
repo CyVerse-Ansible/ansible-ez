@@ -46,9 +46,21 @@ unban_help() {
 }
 
 bannedlist() {
-	local ipstring=`fail2ban-client status ssh|grep 'Banned IP list'|awk 'BEGIN{FS=":"}{print $2}'`
+	local ipstring=`sudo fail2ban-client status ssh|grep 'Banned IP list'|awk 'BEGIN{FS=":"}{print $2}'`
 	ips=($ipstring)
 } 
+
+jaillist() {
+	jails=(`sudo fail2ban-client status|grep 'Jail list'|awk 'BEGIN {FS=":"}{print $2}'|tr -d ','`)
+}
+
+# $1 = jail name
+# $2 = ip to remove
+remove_from_jail() {
+	local jail=$1
+	local ip=$2
+	sudo fail2ban-client set $jail unbanip $ip
+}
 
 unban() {
 	if [ $# -lt 1 ]; then
@@ -69,9 +81,11 @@ unban() {
 			i)
 				local ip=$OPTARG
 				if [[ $ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+					jaillist
 					echo
-					fail2ban-client set sshd unbanip $ip
-					fail2ban-client set ssh unbanip $ip
+					for i in "${jails[@]}"; do
+						remove_from_jail $i $ip
+					done
 					echo
 					echo "If no error was reported, then the ip was probably unbanned"
 				else
@@ -81,10 +95,12 @@ unban() {
 			a)
 				bannedlist
 				echo
+				jaillist
 				for i in "${ips[@]}"; do
 					echo "unbanning ip $i"
-					fail2ban-client set sshd unbanip $i >/dev/null 2>&1
-					fail2ban-client set ssh unbanip $i >/dev/null 2>&1
+					for j in "${jails[@]}"; do
+						remove_from_jail $j $i
+					done
 				done
 				echo
 				;;

@@ -32,4 +32,85 @@ cyverse_public_ip() {
    export CYVERSE_PUBLIC_IP
 }
 
+
+unban_help() {
+	echo
+	echo "usage: unban [-l] [-i ip-address] [-a]"
+	echo
+	echo "-l	print all currently banned ips"
+	echo "-i	unban a single ip address"
+	echo "-a	unban all ip addresses"
+	echo
+	echo "Note: use only one of -l, -i, or -a at a time"
+	echo
+}
+
+bannedlist() {
+	local ipstring=`sudo fail2ban-client status ssh|grep 'Banned IP list'|awk 'BEGIN{FS=":"}{print $2}'`
+	ips=($ipstring)
+} 
+
+jaillist() {
+	jails=(`sudo fail2ban-client status|grep 'Jail list'|awk 'BEGIN {FS=":"}{print $2}'|tr -d ','`)
+}
+
+# $1 = jail name
+# $2 = ip to remove
+remove_from_jail() {
+	local jail=$1
+	local ip=$2
+	sudo fail2ban-client set $jail unbanip $ip
+}
+
+unban() {
+	if [ $# -lt 1 ]; then
+		unban_help
+	else
+		local OPTIND opt                
+		while getopts "li:a" opt; do
+			case $opt in
+			l)
+				bannedlist
+				echo "The following ips are banned"
+				echo
+				for i in "${ips[@]}"; do
+					echo -e "\t$i"
+				done
+				echo
+				;;
+			i)
+				local ip=$OPTARG
+				if [[ $ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+					jaillist
+					echo
+					for i in "${jails[@]}"; do
+						remove_from_jail $i $ip
+					done
+					echo
+					echo "If no error was reported, then the ip was probably unbanned"
+				else
+					echo "?invalid ip address: $ip"
+				fi
+				;;
+			a)
+				bannedlist
+				echo
+				jaillist
+				for i in "${ips[@]}"; do
+					echo "unbanning ip $i"
+					for j in "${jails[@]}"; do
+						remove_from_jail $j $i
+					done
+				done
+				echo
+				;;
+			\?)
+				echo "invalid flag -$OPTARG"
+				unban_help
+				;;
+			esac
+		done
+	fi
+}
+
 alias myip='cyverse_public_ip;echo $CYVERSE_PUBLIC_IP'

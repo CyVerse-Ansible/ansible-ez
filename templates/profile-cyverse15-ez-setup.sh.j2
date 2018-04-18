@@ -43,12 +43,14 @@ Options to pass to 'ezjh':
 
 Options to pass to 'ezd':
 
--p	enable portainer on port 9000
 -d      change data root directory (default: /var/lib/docker)
+-p	enable portainer on port 9000
+-u	force update of docker setup and configuration (ansible)
 
         Example of options:
         
         ezd -d /scratch
+        ezd -u -d /scratch
         ezd -p -d /scratch
 
 Options to pass to 'ezs':

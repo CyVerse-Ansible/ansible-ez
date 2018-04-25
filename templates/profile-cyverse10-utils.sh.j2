@@ -47,7 +47,9 @@ unban_help() {
 }
 
 bannedlist() {
-	local ipstring=`sudo fail2ban-client status ssh|grep 'Banned IP list'|awk 'BEGIN{FS=":"}{print $2}'`
+	jaillist
+	local first_jail=${jails[0]}
+	local ipstring=`sudo fail2ban-client status ${first_jail}|grep 'Banned IP list'|awk 'BEGIN{FS=":"}{print $2}'`
 	ips=($ipstring)
 } 
 

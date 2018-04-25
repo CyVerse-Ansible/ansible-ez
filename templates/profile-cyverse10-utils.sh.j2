@@ -29,6 +29,7 @@ cyverse_public_ip() {
       CYVERSE_PUBLIC_IP=$(curl -s https://api.ipify.org)
    fi
 
+   export JETSTREAM_PUBLIC_IP=$CYVERSE_PUBLIC_IP
    export CYVERSE_PUBLIC_IP
 }
 

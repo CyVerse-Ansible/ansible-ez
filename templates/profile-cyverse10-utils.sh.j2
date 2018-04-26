@@ -36,13 +36,16 @@ cyverse_public_ip() {
 
 unban_help() {
 	echo
-	echo "usage: unban [-l] [-i ip-address] [-a]"
+	echo "usage: unban [-a] [-d ip-address] [-i ip-address] [-l] [-L] [-w ip-address]"
 	echo
-	echo "-l	print all currently banned ips"
-	echo "-i	unban a single ip address"
 	echo "-a	unban all ip addresses"
+	echo "-d	delete a whitelisted ip addresses"
+	echo "-i	unban a single ip address"
+	echo "-l	print all currently banned ips"
+	echo "-L	print all currently whitelisted ips"
+	echo "-w	whitelist and unban a single ip addresses"
 	echo
-	echo "Note: use only one of -l, -i, or -a at a time"
+	echo "Note: use only one option at a time"
 	echo
 }
 
@@ -55,6 +58,29 @@ bannedlist() {
 
 jaillist() {
 	jails=(`sudo fail2ban-client status|grep 'Jail list'|awk 'BEGIN {FS=":"}{print $2}'|tr -d ','`)
+}
+
+whitelistlist () {
+	jails=(`sudo fail2ban-client status|grep 'Jail list'|awk 'BEGIN {FS=":"}{print $2}'|tr -d ','`)
+	local first_jail=${jails[0]}
+	local out=`sudo fail2ban-client get ${first_jail} ignoreip`
+	echo "$out"
+}
+
+# $1 = jail name
+# $2 = ip to add
+add_whitelist_to_jail() {
+	local jail=$1
+	local ip=$2
+	sudo fail2ban-client set $jail addignoreip $ip > /dev/null
+}
+
+# $1 = jail name
+# $2 = ip to remove
+remove_whitelist_to_jail() {
+	local jail=$1
+	local ip=$2
+	sudo fail2ban-client set $jail delignoreip $ip > /dev/null
 }
 
 # $1 = jail name
@@ -70,7 +96,7 @@ unban() {
 		unban_help
 	else
 		local OPTIND opt                
-		while getopts "li:a" opt; do
+		while getopts "lLi:aw:d:" opt; do
 			case $opt in
 			l)
 				bannedlist
@@ -80,6 +106,9 @@ unban() {
 					echo -e "\t$i"
 				done
 				echo
+				;;
+			L)
+				whitelistlist
 				;;
 			i)
 				local ip=$OPTARG
@@ -106,6 +135,30 @@ unban() {
 					done
 				done
 				echo
+				;;
+			w)
+				local ip=$OPTARG
+				if [[ $ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+					jaillist
+					for i in "${jails[@]}"; do
+						add_whitelist_to_jail $i $ip
+					done
+					echo "If no error was reported, then the ip was whitelisted"
+				else
+					echo "?invalid ip address: $ip"
+				fi
+				;;
+			d)
+				local ip=$OPTARG
+				if [[ $ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+					jaillist
+					for i in "${jails[@]}"; do
+						remove_whitelist_to_jail $i $ip
+					done
+					echo "If no error was reported, then the ip removed from the whitelist"
+				else
+					echo "?invalid ip address: $ip"
+				fi
 				;;
 			\?)
 				echo "invalid flag -$OPTARG"

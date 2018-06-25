@@ -63,6 +63,9 @@ anaconda_install () {
 		anaconda_update
 	fi
 
+	# insert chown here
+	chown -R $(id -u):$(id -g) ${ANACONDA_ROOT}
+
 	cd $lastdir
 }
 

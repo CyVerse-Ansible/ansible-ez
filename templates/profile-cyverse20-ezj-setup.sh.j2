@@ -63,9 +63,6 @@ anaconda_install () {
 		anaconda_update
 	fi
 
-	# insert chown here
-	chown -R $(id -u):$(id -g) ${ANACONDA_ROOT}
-
 	cd $lastdir
 }
 
@@ -182,5 +179,8 @@ ezj () {
 		fi
 		anaconda_setpath $pv
 		jupyter_notebook_launch
+
+		# insert chown here
+		sudo chown -R $(id -u):$(id -g) ${ANACONDA_ROOT}
 	fi
 }

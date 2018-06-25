@@ -178,9 +178,7 @@ ezj () {
 			sudo bash -c "eval export update_enabled=${update_option};export rkernel=${r_option};export pversion=${pv};install_root=${CYVERSE_INSTALL_ROOT};$sudo_anaconda_install"
 		fi
 		anaconda_setpath $pv
-		jupyter_notebook_launch
-
-		# insert chown here
 		sudo chown -R $(id -u):$(id -g) ${ANACONDA_ROOT}
+		jupyter_notebook_launch
 	fi
 }

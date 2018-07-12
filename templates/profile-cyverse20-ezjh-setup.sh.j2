@@ -1,22 +1,37 @@
 #!/bin/bash  -x
 
 ezjh () {
-		echo
-                echo "* Updating ez jupyterhub and installing jupyterhub. This may take a long while (10-15 minutes for a fresh install). Take a long coffee break!"
-		sudo rm -rf /opt/cyverse-ez-jupyterhub
-                sudo git clone https://github.com/cyverse/cyverse-ez-jupyterhub.git /opt/cyverse-ez-jupyterhub/ >> {{ ez_local_log }}
-                sudo ansible-pull -v -U https://github.com/cyverse/cyverse-ez-jupyterhub.git -d /opt/cyverse-ez-jupyterhub -i localhost -f >> {{ ez_local_log }} 2>&1
-		if [ $? == 0 ]; then
-			echo "* jupyterhub was updated successfully"
-			echo
-			echo "You shouldn't need to use ezjh again on this system, unless you want to update jupyterhub itself"
-		else
-			echo "* ez jupyterhub or jupyterhub itself may not have updated successfully, but you can probably try executing it"
-		fi
+        local OPTIND opt                
 
+	jupyterlab_enabled="False"
+        while getopts "l" opt; do
+		case $opt in
+		l)
+			echo "DEBUG: option to enable jupyterlab"
+			jupyterlab_enabled="True"
+			;;
+		\?)
+			echo "invalid flag -$OPTARG"
+			;;
+		esac
+	done
+
+	echo
+	echo "* Updating ez jupyterhub and installing jupyterhub. This may take a long while (10-15 minutes for a fresh install). Take a long coffee break!"
+	sudo rm -rf /opt/cyverse-ez-jupyterhub
+	sudo git clone https://github.com/cyverse/cyverse-ez-jupyterhub.git /opt/cyverse-ez-jupyterhub/ >> {{ ez_local_log }}
+	sudo ansible-pull -v -U https://github.com/cyverse/cyverse-ez-jupyterhub.git -d /opt/cyverse-ez-jupyterhub -i localhost -e "{'jupyterhub_enable_lab':${jupyterlab_enabled}}" -f >> {{ ez_local_log }} 2>&1
+	if [ $? == 0 ]; then
+		echo "* jupyterhub was updated successfully"
 		echo
-		cyverse_public_ip
-		echo "To connect to your jupyterhub point your browser to: http://${CYVERSE_PUBLIC_IP}"
-		echo
+		echo "You shouldn't need to use ezjh again on this system, unless you want to update jupyterhub itself"
+	else
+		echo "* ez jupyterhub or jupyterhub itself may not have updated successfully, but you can probably try executing it"
+	fi
+
+	echo
+	cyverse_public_ip
+	echo "To connect to your jupyterhub point your browser to: http://${CYVERSE_PUBLIC_IP}"
+	echo
 
 }

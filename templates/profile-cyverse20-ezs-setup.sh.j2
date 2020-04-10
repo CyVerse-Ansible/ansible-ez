@@ -3,7 +3,7 @@
 ezs () {
 		local OPTIND opt                
 
-		singularity_version="2.6.1"
+		singularity_version="3.5.3"
 		while getopts "r:" opt; do
 		case $opt in
 		r)
@@ -32,8 +32,8 @@ ezs () {
 		fi
 
 		echo
-		echo "To test singularity, type: singularity run shub://vsoch/hello-world"
-		echo "Hint: it should output \"RaawwWWWWWRRRR!!\")"
+		echo "To test singularity, type: singularity -v run library://sylabsed/examples/lolcow"
+		echo "Hint: it should output a cowfucious saying"
 		echo
 
 }
